@@ -23,23 +23,30 @@ body.p2{--main:#198cff;--main2:#7a5cff;--side:#ff315f}
 #msg{text-align:center;min-height:20px;color:#dfc8ff;font-size:13px;font-weight:800;letter-spacing:.05em;z-index:1}
 .diceBox{border-radius:28px;padding:18px 8px 20px;overflow:hidden;z-index:1;background:linear-gradient(90deg,rgba(255,49,95,.13),rgba(255,255,255,.06),rgba(25,140,255,.14))}
 .diceBox:after{content:"";position:absolute;left:8%;right:8%;bottom:8px;height:18px;background:radial-gradient(ellipse,rgba(0,0,0,.7),transparent 70%);filter:blur(7px)}
-#dice{display:flex;justify-content:center;align-items:center;gap:12px;min-height:78px;perspective:900px;position:relative;z-index:2}
-.die{--s:52px;width:var(--s);height:var(--s);position:relative;transform-style:preserve-3d;cursor:pointer;will-change:transform}
-.cube{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--rx,-14deg)) rotateY(var(--ry,18deg)) rotateZ(var(--rz,0deg));transition:transform .22s cubic-bezier(.2,1.3,.25,1)}
-.face{position:absolute;inset:0;border-radius:15px;background:radial-gradient(circle at 25% 18%,#fff,#f8fbff 32%,#d6dee8 72%,#9ba8b8);border:1px solid rgba(255,255,255,.9);box-shadow:inset -10px -12px 18px rgba(0,0,0,.28),inset 8px 8px 16px rgba(255,255,255,.9),0 10px 18px rgba(0,0,0,.35);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:8px}
-.face:before{content:"";position:absolute;inset:3px;border-radius:13px;background:linear-gradient(135deg,rgba(255,255,255,.9),transparent 38%,rgba(0,0,0,.12));pointer-events:none}
-.side{position:absolute;right:-13px;top:7px;width:16px;height:43px;border-radius:8px;background:linear-gradient(90deg,#c5ccd6,#687586,#303846);transform:skewY(28deg);filter:brightness(.85)}
-.topFace{position:absolute;left:7px;top:-13px;width:43px;height:16px;border-radius:8px;background:linear-gradient(180deg,#fff,#bac5d2);transform:skewX(28deg);filter:brightness(1.05)}
-.dot{width:8px;height:8px;border-radius:50%;place-self:center;background:radial-gradient(circle at 30% 25%,#777,#222 48%,#000);box-shadow:inset 1px 1px 2px rgba(255,255,255,.3)}
-.die.locked .cube{filter:drop-shadow(0 0 10px var(--main))}
-.die.locked:after{content:"";position:absolute;inset:-7px;border-radius:19px;border:2px solid var(--main);box-shadow:0 0 14px var(--main),inset 0 0 12px var(--main);animation:pulse 1.1s infinite}
-@keyframes pulse{50%{opacity:.45;transform:scale(1.06)}}
-.die.rolling{animation:roll .72s cubic-bezier(.15,.85,.18,1)}
-.die.rolling .cube{animation:spin .72s linear}
-.die.land{animation:land .32s cubic-bezier(.2,1.5,.3,1)}
-@keyframes roll{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-22px) translateX(var(--dx,0)) scale(1.08)}100%{transform:translateY(0) scale(1)}}
-@keyframes spin{to{transform:rotateX(var(--sx,720deg)) rotateY(var(--sy,540deg)) rotateZ(var(--sz,240deg))}}
-@keyframes land{40%{transform:translateY(5px) scale(1.04,.92)}100%{transform:translateY(0) scale(1)}}
+#dice{display:flex;justify-content:center;align-items:center;gap:12px;min-height:84px;perspective:1050px;perspective-origin:50% 35%;position:relative;z-index:2}
+.die{--s:54px;--half:calc(var(--s)/2);width:var(--s);height:var(--s);position:relative;transform-style:preserve-3d;cursor:pointer;will-change:transform;filter:drop-shadow(0 15px 13px rgba(0,0,0,.42))}
+.die:before{content:"";position:absolute;left:10%;right:10%;bottom:-15px;height:15px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,0,.64),rgba(0,0,0,.2) 50%,transparent 72%);filter:blur(5px);transform:rotateX(62deg);opacity:.78;pointer-events:none}
+.cube{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);transition:transform .22s cubic-bezier(.2,1.15,.25,1),filter .22s;will-change:transform}
+.face{position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at 28% 22%,#ffffff 0 20%,#f5f8ff 39%,#d5dde7 70%,#9aa6b5 100%);border:1px solid rgba(255,255,255,.92);box-shadow:inset 8px 8px 15px rgba(255,255,255,.86),inset -11px -13px 18px rgba(10,18,31,.34),inset 0 0 0 2px rgba(255,255,255,.18),0 7px 13px rgba(0,0,0,.26);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:8px;backface-visibility:hidden;overflow:hidden;transition:opacity .12s}
+.face:before{content:"";position:absolute;inset:3px;border-radius:13px;background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(255,255,255,.22) 31%,transparent 47%,rgba(0,0,0,.12));pointer-events:none}
+.face:after{content:"";position:absolute;inset:-1px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.48),transparent 20% 74%,rgba(0,0,0,.17));mix-blend-mode:soft-light;pointer-events:none}
+.face.front{transform:translateZ(var(--half))}.face.back{transform:rotateY(180deg) translateZ(var(--half))}.face.right{transform:rotateY(90deg) translateZ(var(--half))}.face.left{transform:rotateY(-90deg) translateZ(var(--half))}.face.top{transform:rotateX(90deg) translateZ(var(--half))}.face.bottom{transform:rotateX(-90deg) translateZ(var(--half))}
+.die:not(.rolling) .cube{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg)}
+.die:not(.rolling) .face.front{transform:translateZ(0);opacity:1}
+.die:not(.rolling) .face:not(.front){opacity:0;pointer-events:none}
+.die.rolling .face{opacity:1}
+.dot{width:8px;height:8px;border-radius:50%;place-self:center;background:radial-gradient(circle at 34% 28%,#6e7580 0 10%,#171a21 52%,#020306 100%);box-shadow:inset 1px 1px 2px rgba(255,255,255,.28),inset -2px -2px 4px rgba(0,0,0,.85),0 1px 1px rgba(255,255,255,.18);transform:translateZ(1px);z-index:2}
+.die.locked .cube{filter:drop-shadow(0 0 12px var(--main)) drop-shadow(0 0 20px color-mix(in srgb,var(--main) 55%,transparent))}
+.die.locked:after{content:"";position:absolute;inset:-8px;border-radius:21px;border:2px solid var(--main);box-shadow:0 0 16px var(--main),inset 0 0 13px var(--main);animation:pulse 1.1s infinite;pointer-events:none}
+@keyframes pulse{50%{opacity:.45;transform:scale(1.07)}}
+.die.rolling{animation:roll .78s cubic-bezier(.15,.85,.18,1)}
+.die.rolling:before{animation:shadowHit .78s cubic-bezier(.15,.85,.18,1)}
+.die.rolling .cube{animation:spin .78s linear}
+.die.land{animation:land .3s cubic-bezier(.2,1.45,.3,1)}
+@keyframes roll{0%{transform:translateY(0) translateX(0) scale(1) rotateZ(0)}30%{transform:translateY(-24px) translateX(var(--dx,0)) scale(1.08) rotateZ(var(--rz2,10deg))}65%{transform:translateY(-7px) translateX(var(--dx2,0)) scale(1.03) rotateZ(var(--rz3,-6deg))}100%{transform:translateY(0) translateX(0) scale(1) rotateZ(0)}}
+@keyframes shadowHit{0%,100%{opacity:.78;transform:rotateX(62deg) scale(1)}30%{opacity:.28;transform:rotateX(62deg) scale(.62)}}
+@keyframes spin{0%{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg)}100%{transform:rotateX(var(--sx,900deg)) rotateY(var(--sy,720deg)) rotateZ(var(--sz,360deg))}}
+@keyframes land{42%{transform:translateY(5px) scale(1.04,.92)}72%{transform:translateY(-1px) scale(.99,1.02)}100%{transform:translateY(0) scale(1)}}
 .board{border-radius:28px;padding:14px 8px 12px;display:grid;grid-template-rows:auto auto 1fr auto;gap:10px;z-index:1;overflow:hidden}
 .title{text-align:center;font-size:14px;font-weight:1000;letter-spacing:.32em;color:#ffd77a;text-shadow:0 0 15px rgba(255,215,122,.38)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -137,7 +144,14 @@ function build(){
  for(let i=0;i<5;i++){
   let d=document.createElement('div');
   d.className='die';
-  d.innerHTML='<div class="cube"><div class="topFace"></div><div class="side"></div><div class="face"></div></div>';
+  d.innerHTML=`<div class="cube">
+     <div class="face front">${face(1)}</div>
+     <div class="face back">${face(2)}</div>
+     <div class="face right">${face(3)}</div>
+     <div class="face left">${face(4)}</div>
+     <div class="face top">${face(5)}</div>
+     <div class="face bottom">${face(6)}</div>
+   </div>`;
   d.onclick=()=>toggle(i);
   E.dice.appendChild(d);
   diceEls.push(d);
@@ -156,15 +170,15 @@ function build(){
 }
 function setDice(){
  S.d.forEach((v,i)=>{
-  const d=diceEls[i], f=d.querySelector('.face');
+  const d=diceEls[i], front=d.querySelector('.face.front');
+  d.dataset.value=v;
   d.classList.toggle('locked',S.lock[i]);
-  d.style.setProperty('--rx',[-14,-9,-16,-11,-13][i]+'deg');
-  d.style.setProperty('--ry',[18,-16,13,-18,16][i]+'deg');
-  d.style.setProperty('--rz',[-9,8,-5,8,10][i]+'deg');
-  f.innerHTML=face(v);
+  if(front.dataset.value!==String(v)){
+   front.dataset.value=String(v);
+   front.innerHTML=face(v);
+  }
  });
-}
-function cnt(){let c={1:0,2:0,3:0,4:0,5:0,6:0};S.d.forEach(x=>c[x]++);return c}
+}function cnt(){let c={1:0,2:0,3:0,4:0,5:0,6:0};S.d.forEach(x=>c[x]++);return c}
 function sum(){return S.d.reduce((a,b)=>a+b,0)}
 function cal(k){
  let c=cnt(),s=sum(),v=Object.values(c),u=[...new Set(S.d)].sort((a,b)=>a-b).join('');
@@ -217,10 +231,14 @@ function roll(){
  diceEls.forEach((d,i)=>{
   if(!S.lock[i]){
    d.classList.remove('rolling','land');
-   d.style.setProperty('--dx',(Math.random()*22-11)+'px');
-   d.style.setProperty('--sx',(540+Math.random()*540)+'deg');
-   d.style.setProperty('--sy',(540+Math.random()*540)+'deg');
-   d.style.setProperty('--sz',(180+Math.random()*360)+'deg');
+   const dx=Math.random()*26-13, rz=Math.random()*28-14;
+   d.style.setProperty('--dx',dx+'px');
+   d.style.setProperty('--dx2',(-dx*.5)+'px');
+   d.style.setProperty('--rz2',rz+'deg');
+   d.style.setProperty('--rz3',(-rz*.6)+'deg');
+   d.style.setProperty('--sx',(720+Math.random()*720)+'deg');
+   d.style.setProperty('--sy',(720+Math.random()*720)+'deg');
+   d.style.setProperty('--sz',(240+Math.random()*480)+'deg');
    void d.offsetWidth;
    d.classList.add('rolling');
   }
@@ -230,7 +248,7 @@ function roll(){
   AudioX.seq([220,160]);
   render(true);
   if(S.rolls===0)E.msg.textContent='请选择计分格';
- },740);
+ },810);
 }
 function toggle(i){
  if(!S.rolled||!S.active){E.msg.textContent='请先掷骰';AudioX.tone(120,.12);return}
